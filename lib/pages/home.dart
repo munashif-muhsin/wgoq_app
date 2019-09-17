@@ -10,7 +10,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
   List<Color> _colors = [
     Colors.blue[800],
     Colors.pinkAccent[400],
@@ -27,9 +26,12 @@ class _HomePageState extends State<HomePage> {
   bool isLoaded = false;
   List<Post> _latestPosts = [];
   List<Post> _posts = [];
+  ScrollController _scrollController;
+  final _scrollThreshold = 200.0;
+  int currentPage = 1;
+  bool isNewPageLoading = false;
 
   PostService _postService = PostService();
-
 
   Widget _buildLatestPostItem(BuildContext context, int index) {
     return Container(
@@ -47,7 +49,7 @@ class _HomePageState extends State<HomePage> {
               child: FadeInImage(
                 alignment: Alignment.center,
                 fit: BoxFit.cover,
-                placeholder: AssetImage('assets/images/test_image.jpg'),
+                placeholder: AssetImage('assets/images/placeholder.png'),
                 image: NetworkImage(_latestPosts[index].thumbnail),
               ),
             ),
@@ -122,17 +124,12 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildStory(BuildContext context, int index) {
-
     String dateString = '';
     dateString += _posts[index].date.day.toString();
     dateString += '/' + _posts[index].date.month.toString();
     dateString += '/' + _posts[index].date.year.toString();
     dateString += ' ' + _posts[index].date.hour.toString();
     dateString += ':' + _posts[index].date.minute.toString();
-
-
-
-
 
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
@@ -144,7 +141,7 @@ class _HomePageState extends State<HomePage> {
               borderRadius: BorderRadius.circular(10),
               child: FadeInImage(
                 image: NetworkImage(_posts[index].thumbnail),
-                placeholder: AssetImage('assets/images/test_image.jpg'),
+                placeholder: AssetImage('assets/images/placeholder.png'),
                 fit: BoxFit.cover,
                 height: 80,
                 width: 80,
@@ -160,7 +157,9 @@ class _HomePageState extends State<HomePage> {
                   child: Text(
                     _posts[index].title,
                     style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.black),
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontSize: 15),
                   ),
                 ),
                 SizedBox(height: 10),
@@ -185,6 +184,29 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  loadNextPage() async {
+    if (isNewPageLoading) {
+      return;
+    }
+    setState(() {
+      isNewPageLoading = true;
+    });
+    List<Post> newPosts = await _postService.getPosts(currentPage + 1);
+    currentPage++;
+    setState(() {
+      _posts.addAll(newPosts);
+      isNewPageLoading = false;
+    });
+  }
+
+  void _onScroll() {
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    if (maxScroll - currentScroll <= _scrollThreshold) {
+      loadNextPage();
+    }
+  }
+
   _loadData() async {
     Map pageContent = await _postService.getHomePageContent();
     isLoaded = true;
@@ -197,6 +219,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
+    _scrollController.addListener(_onScroll);
     _loadData();
   }
 
@@ -210,6 +234,7 @@ class _HomePageState extends State<HomePage> {
             ),
           )
         : ListView(
+            controller: _scrollController,
             children: <Widget>[
               SafeArea(
                 child: Container(
@@ -261,6 +286,16 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
+              isNewPageLoading ? 
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.symmetric(vertical: 15),
+                child: SpinKitWave(
+                  color: Colors.black87,
+                  size: 20,
+                ),
+              ) : 
+              Container(),
             ],
           );
   }
