@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:html/dom.dart' as dom;
+import 'package:wgoq_app/modals/post.dart';
 
 class PostPage extends StatelessWidget {
+  Post post;
+
+  PostPage(this.post);
+
   @override
   Widget build(BuildContext context) {
+    String dateString = '';
+    dateString += post.date.day.toString();
+    dateString += '/' + post.date.month.toString();
+    dateString += '/' + post.date.year.toString();
+    dateString += ' ' + post.date.hour.toString();
+    dateString += ':' + post.date.minute.toString();
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomScrollView(
@@ -18,10 +29,10 @@ class PostPage extends StatelessWidget {
                 child: Stack(
                   children: <Widget>[
                     FadeInImage(
-                      image: AssetImage('assets/images/test_image.jpg'),
+                      image: NetworkImage(post.thumbnail),
                       height: 300.0,
                       fit: BoxFit.cover,
-                      placeholder: AssetImage('assets/images/test_image.jpg'),
+                      placeholder: AssetImage('assets/images/placeholder.png'),
                     ),
                     Positioned(
                       bottom: 0,
@@ -40,7 +51,7 @@ class PostPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                tag: 'test',
+                tag: post.thumbnail,
               ),
             ),
             backgroundColor: Colors.white,
@@ -56,7 +67,7 @@ class PostPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                 child: Text(
-                  'DFI to screen 6 award-winning musical films at MIA',
+                  post.title,
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
@@ -66,7 +77,7 @@ class PostPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                 child: Text(
-                  '01/01/2019 at 4:00 PM',
+                  dateString,
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w300,
@@ -77,8 +88,7 @@ class PostPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                 child: Html(
-                  data:
-                      '<p>Doha: Al Duhail and Al Rayyan played out an exciting 1-1 draw in round 3 of the QNB Stars League (QSL) at the Al Janoub Stadium yesterday.</p>\n<p>Ahmed Yasser took Al Duhail ahead in the 66th minute, a lead neutralised by new recruit Franck Kom for Al Rayyan in the 75th minute.</p>\n<p>Al Duhail took their points tally to five and Al Rayyan three. Both teams thus maintained their unbeaten record.</p>\n<p>Al Duhail had beaten Qatar SC 2-1 and drawn 1-1 with Al Arabi, while Al Rayyan had drawn 2-2 with Umm Salal and goalless with Al Gharafa.</p>\n<p>Al Duhail were dominant in first-half play with 65 per cent possession (67 per cent in favour of Al Duhail at final whistle), but they could not convert the opportunities.</p>\n<p>Al Duhail’s Paulo Edmilson, Ali Afif and Almoez Ali all made attempts at the rival goal. At the other end, Al Rayyan’s Abdelaziz Hazaa skied his shot over the bar.</p>\n<p>Al Duhail kept attacking and Ahmed Yasser provided them with the winner in the 66th minute when he headed in a free-kick by Ali Afif into the top right corner of the net, leaving goalkeeper Fahd Younis rooted at the goal.</p>\n<p>Not long after, Al Rayyan equalised, Cameroonian Kom banging home a rebound from distance off goalkeeper Amine Lecomte after he punched away a shot from Abdelaziz Hatem, who joined Al Rayyan from Al Gharafa this season.</p>\n<p>At the end of the third round, Al Arabi are at the top of the standings with two wins and one draw.</p>\n<p>Defending champions Al Sadd who are occupying the third spot, will meet Al Sailiya in their third round fixture on September 24. The match was postponed due to the latter’s AFC Champions League second-leg quarter-final against Saudi Arabia’s Al Nassr which takes place in Doha today.</p>',
+                  data: post.content,
                 ),
               ),
             ]),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:wgoq_app/modals/category.dart';
 import 'package:wgoq_app/modals/post.dart';
+import 'package:wgoq_app/pages/post.dart';
 import 'package:wgoq_app/services/posts.dart';
 
 class HomePage extends StatefulWidget {
@@ -34,58 +35,70 @@ class _HomePageState extends State<HomePage> {
   PostService _postService = PostService();
 
   Widget _buildLatestPostItem(BuildContext context, int index) {
-    return Container(
-      width: 280,
-      margin: EdgeInsets.only(left: 15, top: 15, bottom: 15),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Stack(
-          children: <Widget>[
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              top: 0,
-              child: FadeInImage(
-                alignment: Alignment.center,
-                fit: BoxFit.cover,
-                placeholder: AssetImage('assets/images/placeholder.png'),
-                image: NetworkImage(_latestPosts[index].thumbnail),
-              ),
-            ),
-            Positioned(
-              child: Container(
-                padding: EdgeInsets.all(10),
-                color: Colors.black38,
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      alignment: Alignment.centerRight,
-                      width: MediaQuery.of(context).size.width,
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.bookmark_border,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {},
-                      ),
-                    ),
-                    Spacer(
-                      flex: 1,
-                    ),
-                    Text(
-                      _latestPosts[index].title,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    )
-                  ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) => PostPage(_latestPosts[index]),
+          ),
+        );
+      },
+      child: Container(
+        width: 280,
+        margin: EdgeInsets.only(left: 15, top: 15, bottom: 15),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20),
+          child: Stack(
+            children: <Widget>[
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                top: 0,
+                child: Hero(
+                  tag: _latestPosts[index].thumbnail,
+                  child: FadeInImage(
+                    alignment: Alignment.center,
+                    fit: BoxFit.cover,
+                    placeholder: AssetImage('assets/images/placeholder.png'),
+                    image: NetworkImage(_latestPosts[index].thumbnail),
+                  ),
                 ),
               ),
-            )
-          ],
+              Positioned(
+                child: Container(
+                  padding: EdgeInsets.all(10),
+                  color: Colors.black38,
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        alignment: Alignment.centerRight,
+                        width: MediaQuery.of(context).size.width,
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.bookmark_border,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {},
+                        ),
+                      ),
+                      Spacer(
+                        flex: 1,
+                      ),
+                      Text(
+                        _latestPosts[index].title,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -131,54 +144,66 @@ class _HomePageState extends State<HomePage> {
     dateString += ' ' + _posts[index].date.hour.toString();
     dateString += ':' + _posts[index].date.minute.toString();
 
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) => PostPage(_posts[index]),
+          ),
+        );
+      },
       child: Container(
-        height: 100,
-        child: Row(
-          children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: FadeInImage(
-                image: NetworkImage(_posts[index].thumbnail),
-                placeholder: AssetImage('assets/images/placeholder.png'),
-                fit: BoxFit.cover,
-                height: 80,
-                width: 80,
-              ),
-            ),
-            SizedBox(width: 10),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.6,
-                  child: Text(
-                    _posts[index].title,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        fontSize: 15),
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+        child: Container(
+          height: 100,
+          child: Row(
+            children: <Widget>[
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Hero(
+                  tag: _posts[index].thumbnail,
+                  child: FadeInImage(
+                    image: NetworkImage(_posts[index].thumbnail),
+                    placeholder: AssetImage('assets/images/placeholder.png'),
+                    fit: BoxFit.cover,
+                    height: 80,
+                    width: 80,
                   ),
                 ),
-                SizedBox(height: 10),
-                Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.access_time,
-                      size: 12,
+              ),
+              SizedBox(width: 10),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.6,
+                    child: Text(
+                      _posts[index].title,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          fontSize: 15),
                     ),
-                    SizedBox(width: 5),
-                    Text(
-                      dateString,
-                      style: TextStyle(fontSize: 11),
-                    )
-                  ],
-                )
-              ],
-            )
-          ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.access_time,
+                        size: 12,
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        dateString,
+                        style: TextStyle(fontSize: 11),
+                      )
+                    ],
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -286,16 +311,16 @@ class _HomePageState extends State<HomePage> {
                   },
                 ),
               ),
-              isNewPageLoading ? 
-              Container(
-                alignment: Alignment.center,
-                margin: EdgeInsets.symmetric(vertical: 15),
-                child: SpinKitWave(
-                  color: Colors.black87,
-                  size: 20,
-                ),
-              ) : 
-              Container(),
+              isNewPageLoading
+                  ? Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.symmetric(vertical: 15),
+                      child: SpinKitWave(
+                        color: Colors.black87,
+                        size: 20,
+                      ),
+                    )
+                  : Container(),
             ],
           );
   }
