@@ -40,25 +40,25 @@ class _TabsPageState extends State<TabsPage>
               Tab(
                 icon: Icon(
                   Icons.home,
-                  size: 30,
+                  size: 22,
                 ),
               ),
               Tab(
                 icon: Icon(
                   Icons.category,
-                  size: 30,
+                  size: 22,
                 ),
               ),
               Tab(
                 icon: Icon(
                   Icons.bookmark,
-                  size: 30,
+                  size: 22,
                 ),
               ),
               Tab(
                 icon: Icon(
                   Icons.search,
-                  size: 30,
+                  size: 22,
                 ),
               )
             ],
