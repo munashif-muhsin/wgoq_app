@@ -31,6 +31,7 @@ class PostPage extends StatelessWidget {
                     FadeInImage(
                       image: NetworkImage(post.thumbnail),
                       height: 300.0,
+                      width: MediaQuery.of(context).size.width,
                       fit: BoxFit.cover,
                       placeholder: AssetImage('assets/images/placeholder.png'),
                     ),

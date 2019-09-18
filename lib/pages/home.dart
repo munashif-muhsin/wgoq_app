@@ -154,56 +154,55 @@ class _HomePageState extends State<HomePage> {
       },
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        child: Container(
-          height: 100,
-          child: Row(
-            children: <Widget>[
-              ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Hero(
-                  tag: _posts[index].thumbnail,
-                  child: FadeInImage(
-                    image: NetworkImage(_posts[index].thumbnail),
-                    placeholder: AssetImage('assets/images/placeholder.png'),
-                    fit: BoxFit.cover,
-                    height: 80,
-                    width: 80,
-                  ),
+        height: 100,
+        child: Row(
+          children: <Widget>[
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Hero(
+                tag: _posts[index].thumbnail,
+                child: FadeInImage(
+                  image: NetworkImage(_posts[index].thumbnail),
+                  placeholder: AssetImage('assets/images/placeholder.png'),
+                  fit: BoxFit.cover,
+                  height: 80,
+                  width: 80,
                 ),
               ),
-              SizedBox(width: 10),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    child: Text(
-                      _posts[index].title,
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                          fontSize: 15),
-                    ),
+            ),
+            SizedBox(width: 10),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Container(
+                  constraints: BoxConstraints(maxHeight: 50),
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  child: Text(
+                    _posts[index].title,
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontSize: 15),
                   ),
-                  SizedBox(height: 10),
-                  Row(
-                    children: <Widget>[
-                      Icon(
-                        Icons.access_time,
-                        size: 12,
-                      ),
-                      SizedBox(width: 5),
-                      Text(
-                        dateString,
-                        style: TextStyle(fontSize: 11),
-                      )
-                    ],
-                  )
-                ],
-              )
-            ],
-          ),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.access_time,
+                      size: 12,
+                    ),
+                    SizedBox(width: 5),
+                    Text(
+                      dateString,
+                      style: TextStyle(fontSize: 11),
+                    )
+                  ],
+                )
+              ],
+            )
+          ],
         ),
       ),
     );
