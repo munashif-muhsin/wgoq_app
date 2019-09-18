@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wgoq_app/pages/bookmarks.dart';
 import 'package:wgoq_app/pages/categories.dart';
 import 'package:wgoq_app/pages/home.dart';
 import 'package:wgoq_app/pages/search.dart';
@@ -29,7 +30,7 @@ class _TabsPageState extends State<TabsPage>
       body: TabBarView(
         physics: NeverScrollableScrollPhysics(),
         controller: _tabController,
-        children: <Widget>[HomePage(switchTabs), CategoriesPage(), Container(), SearchPage()],
+        children: <Widget>[HomePage(switchTabs), CategoriesPage(), BookmarksPage(), SearchPage()],
       ),
       bottomNavigationBar: SafeArea(
         child: SafeArea(

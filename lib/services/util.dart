@@ -1,18 +1,64 @@
 import 'package:wgoq_app/modals/category.dart';
 import 'package:wgoq_app/modals/post.dart';
 
+import 'database_helpers.dart';
+
 class UtilService {
   Post createPost(data) {
     return Post(
-        authorId: data['author'],
-        category: data['categories'][0],
-        content: cleanHtmlContent(data['content']['rendered']),
-        date: DateTime.parse(data['date']),
-        id: data['id'],
-        link: data['link'],
-        thumbnail: data['jetpack_featured_media_url'],
-        title: data['title']['rendered'],
-      );
+      authorId: data['author'],
+      category: data['categories'][0],
+      content: cleanHtmlContent(data['content']['rendered']),
+      date: DateTime.parse(data['date']),
+      id: data['id'],
+      link: data['link'],
+      thumbnail: data['jetpack_featured_media_url'],
+      title: data['title']['rendered'],
+    );
+  }
+
+  Future<Post> getPostFromBookmark() async {
+    DatabaseHelper helper = DatabaseHelper.instance;
+    int rowId = 42374;
+    Post post = await helper.queryPost(rowId);
+    if (post == null) {
+      return null;
+    } else {
+      return post;
+    }
+  }
+
+  Future<bool> removeBookmark(int id) async {
+    DatabaseHelper helper = DatabaseHelper.instance;
+    try {
+        bool status = await helper.deleteWithId(id);
+        return status;
+      } catch (e) {
+        print(e);
+        return false;
+      }
+  }
+
+  Future<List<Post>> getBookmarks() async {
+    DatabaseHelper helper = DatabaseHelper.instance;
+    List<Post> posts = await helper.queryAll();
+    if(posts != null) {
+      return posts;
+    } else {
+      return [];
+    }
+  }
+
+  Future<bool> saveBookmark(Post post) async {
+    DatabaseHelper helper = DatabaseHelper.instance;
+    try {
+      int id = await helper.insert(post);
+      print('inserted row: $id');
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
   }
 
   String cleanHtmlContent(String data) {

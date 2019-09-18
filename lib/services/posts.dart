@@ -8,6 +8,12 @@ class PostService {
   List<Post> posts;
   UtilService _utilService = UtilService();
 
+  Future<List<Post>> getBookmarks() async {
+
+    
+
+  }
+
   Future<List<Post>> search(String value) async {
     List<Post> _posts = [];
     final String url =
