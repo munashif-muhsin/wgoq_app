@@ -8,6 +8,11 @@ import 'package:wgoq_app/pages/post.dart';
 import 'package:wgoq_app/services/posts.dart';
 
 class HomePage extends StatefulWidget {
+
+  final Function _switchTab;
+
+  HomePage(this._switchTab);
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -129,12 +134,16 @@ class _HomePageState extends State<HomePage>
       alignment: Alignment.center,
       child: GestureDetector(
         onTap: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  CategoryPage(_categories[index]),
-            ),
-          );
+          if (index < _categories.length) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    CategoryPage(_categories[index]),
+              ),
+            );
+          } else {
+            widget._switchTab(1);
+          }
         },
         child: index < _categories.length
             ? Text(

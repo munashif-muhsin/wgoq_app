@@ -18,6 +18,10 @@ class _TabsPageState extends State<TabsPage>
     _tabController = TabController(length: 4, vsync: this);
   }
 
+  void switchTabs(int index) {
+    _tabController.animateTo(index);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +29,7 @@ class _TabsPageState extends State<TabsPage>
       body: TabBarView(
         physics: NeverScrollableScrollPhysics(),
         controller: _tabController,
-        children: <Widget>[HomePage(), CategoriesPage(), Container(), SearchPage()],
+        children: <Widget>[HomePage(switchTabs), CategoriesPage(), Container(), SearchPage()],
       ),
       bottomNavigationBar: SafeArea(
         child: SafeArea(
