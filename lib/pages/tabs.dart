@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wgoq_app/pages/categories.dart';
 import 'package:wgoq_app/pages/home.dart';
+import 'package:wgoq_app/pages/search.dart';
 
 class TabsPage extends StatefulWidget {
   @override
@@ -24,7 +25,7 @@ class _TabsPageState extends State<TabsPage>
       body: TabBarView(
         physics: NeverScrollableScrollPhysics(),
         controller: _tabController,
-        children: <Widget>[HomePage(), CategoriesPage(), Container(), Container()],
+        children: <Widget>[HomePage(), CategoriesPage(), Container(), SearchPage()],
       ),
       bottomNavigationBar: SafeArea(
         child: SafeArea(

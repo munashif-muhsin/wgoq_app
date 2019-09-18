@@ -8,6 +8,30 @@ class PostService {
   List<Post> posts;
   UtilService _utilService = UtilService();
 
+  Future<List<Post>> search(String value) async {
+    List<Post> _posts = [];
+    final String url =
+        'https://www.wgoqatar.com/wp-json/wp/v2/search?search=$value';
+    var response = await http.get(url);
+    if (response.statusCode == 200) {
+      List jsonResponse = convert.jsonDecode(response.body);
+      var futures = jsonResponse.map((item) {
+        return http.get(
+          'https://www.wgoqatar.com/wp-json/wp/v2/posts/${item['id']}',
+        );
+      });
+      List responses = await Future.wait(futures);
+      for (var i = 0; i < responses.length; i++) {
+        var jsonResponse = convert.jsonDecode(responses[i].body);
+        _posts.add(_utilService.createPost(jsonResponse));
+      }
+      return _posts;
+    } else {
+      print("Request failed with status: ${response.statusCode}.");
+      return [];
+    }
+  }
+
   Future<List<Post>> getPosts([int pageNumber = 1]) async {
     List<Post> _posts = [];
     final String url =

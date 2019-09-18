@@ -2,8 +2,7 @@ import 'package:wgoq_app/modals/category.dart';
 import 'package:wgoq_app/modals/post.dart';
 
 class UtilService {
-  
-    Post createPost(data) {
+  Post createPost(data) {
     return Post(
         authorId: data['author'],
         category: data['categories'][0],
@@ -12,7 +11,8 @@ class UtilService {
         id: data['id'],
         link: data['link'],
         thumbnail: data['jetpack_featured_media_url'],
-        title: data['title']['rendered']);
+        title: data['title']['rendered'],
+      );
   }
 
   String cleanHtmlContent(String data) {
@@ -32,10 +32,6 @@ class UtilService {
   }
 
   createCategory(data) {
-    return Category(
-      id: data['id'],
-      name: data['name']
-    );
+    return Category(id: data['id'], name: data['name']);
   }
-
 }
