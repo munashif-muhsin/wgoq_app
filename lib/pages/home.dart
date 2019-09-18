@@ -10,7 +10,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
   List<Color> _colors = [
     Colors.blue[800],
     Colors.pinkAccent[400],
@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
     Colors.blueGrey[600],
   ];
   List<Category> _categories = [];
-  bool isLoaded = false;
+  bool isLoaded;
   List<Post> _latestPosts = [];
   List<Post> _posts = [];
   ScrollController _scrollController;
@@ -243,6 +243,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    isLoaded = false;
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
     _loadData();
@@ -323,4 +324,7 @@ class _HomePageState extends State<HomePage> {
             ],
           );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

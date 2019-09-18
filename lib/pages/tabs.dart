@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wgoq_app/pages/categories.dart';
 import 'package:wgoq_app/pages/home.dart';
 
 class TabsPage extends StatefulWidget {
@@ -7,7 +8,7 @@ class TabsPage extends StatefulWidget {
 }
 
 class _TabsPageState extends State<TabsPage>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin{
   TabController _tabController;
 
   @override
@@ -23,7 +24,7 @@ class _TabsPageState extends State<TabsPage>
       body: TabBarView(
         physics: NeverScrollableScrollPhysics(),
         controller: _tabController,
-        children: <Widget>[HomePage(), Container(), Container(), Container()],
+        children: <Widget>[HomePage(), CategoriesPage(), Container(), Container()],
       ),
       bottomNavigationBar: SafeArea(
         child: SafeArea(

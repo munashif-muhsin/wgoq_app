@@ -3,7 +3,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:wgoq_app/modals/post.dart';
 
 class PostPage extends StatelessWidget {
-  Post post;
+  final Post post;
 
   PostPage(this.post);
 
