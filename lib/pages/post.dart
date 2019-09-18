@@ -1,20 +1,76 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:wgoq_app/modals/post.dart';
+import 'package:wgoq_app/services/util.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class PostPage extends StatelessWidget {
+class PostPage extends StatefulWidget {
   final Post post;
-
   PostPage(this.post);
+
+  @override
+  _PostPageState createState() => _PostPageState();
+}
+
+class _PostPageState extends State<PostPage> {
+
+  bool isBookmarked = false;
+  UtilService _utilService = UtilService();
+
+  checkIfBookmarked() async {
+    Post post = await _utilService.getPostFromBookmark(widget.post.id);
+    if(post == null) {
+      setState(() {
+        isBookmarked = false;
+      });
+    } else {
+      setState(() {
+        isBookmarked = true;
+      });
+    }
+  }
+
+  toggleBookmark() async {
+    if(isBookmarked) {
+      bool result = await _utilService.removeBookmark(widget.post.id);
+      if(result) {
+        Fluttertoast.showToast(
+            msg: "Bookmark removed.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIos: 1,
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+            fontSize: 14.0
+        );
+        setState(() {
+          isBookmarked  = false;
+        });
+      }
+    } else {
+      bool result = await _utilService.saveBookmark(widget.post);
+      if(result) {
+        setState(() {
+          isBookmarked  = true;
+        });
+      }
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkIfBookmarked();
+  }
 
   @override
   Widget build(BuildContext context) {
     String dateString = '';
-    dateString += post.date.day.toString();
-    dateString += '/' + post.date.month.toString();
-    dateString += '/' + post.date.year.toString();
-    dateString += ' ' + post.date.hour.toString();
-    dateString += ':' + post.date.minute.toString();
+    dateString += widget.post.date.day.toString();
+    dateString += '/' + widget.post.date.month.toString();
+    dateString += '/' + widget.post.date.year.toString();
+    dateString += ' ' + widget.post.date.hour.toString();
+    dateString += ':' + widget.post.date.minute.toString();
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -29,7 +85,7 @@ class PostPage extends StatelessWidget {
                 child: Stack(
                   children: <Widget>[
                     FadeInImage(
-                      image: NetworkImage(post.thumbnail),
+                      image: NetworkImage(widget.post.thumbnail),
                       height: 300.0,
                       width: MediaQuery.of(context).size.width,
                       fit: BoxFit.cover,
@@ -52,14 +108,17 @@ class PostPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                tag: post.thumbnail,
+                tag: widget.post.thumbnail,
               ),
             ),
             backgroundColor: Colors.white,
             actions: <Widget>[
               IconButton(
-                icon: Icon(Icons.bookmark_border),
-                onPressed: () {},
+                icon: isBookmarked ? Icon(Icons.bookmark) : Icon(Icons.bookmark_border),
+                onPressed: () {
+                  print('cliecked');
+                  toggleBookmark();
+                },
               )
             ],
           ),
@@ -68,7 +127,7 @@ class PostPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                 child: Text(
-                  post.title,
+                  widget.post.title,
                   style: TextStyle(
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
@@ -89,7 +148,7 @@ class PostPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
                 child: Html(
-                  data: post.content,
+                  data: widget.post.content,
                 ),
               ),
             ]),

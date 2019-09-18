@@ -75,21 +75,11 @@ class _HomePageState extends State<HomePage>
               ),
               Positioned(
                 child: Container(
+                  width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.all(10),
                   color: Colors.black38,
                   child: Column(
                     children: <Widget>[
-                      Container(
-                        alignment: Alignment.centerRight,
-                        width: MediaQuery.of(context).size.width,
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.bookmark_border,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {},
-                        ),
-                      ),
                       Spacer(
                         flex: 1,
                       ),

@@ -17,10 +17,9 @@ class UtilService {
     );
   }
 
-  Future<Post> getPostFromBookmark() async {
+  Future<Post> getPostFromBookmark(int id) async {
     DatabaseHelper helper = DatabaseHelper.instance;
-    int rowId = 42374;
-    Post post = await helper.queryPost(rowId);
+    Post post = await helper.queryPost(id);
     if (post == null) {
       return null;
     } else {
