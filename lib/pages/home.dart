@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:wgoq_app/components/story.dart';
 import 'package:wgoq_app/modals/category.dart';
 import 'package:wgoq_app/modals/post.dart';
+import 'package:wgoq_app/pages/category.dart';
 import 'package:wgoq_app/pages/post.dart';
 import 'package:wgoq_app/services/posts.dart';
 
@@ -10,7 +12,8 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
+class _HomePageState extends State<HomePage>
+    with AutomaticKeepAliveClientMixin {
   List<Color> _colors = [
     Colors.blue[800],
     Colors.pinkAccent[400],
@@ -124,26 +127,29 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
         borderRadius: BorderRadius.circular(5),
       ),
       alignment: Alignment.center,
-      child: index < _categories.length
-          ? Text(
-              _categories[index].name,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold),
-            )
-          : Text('see more'),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (BuildContext context) =>
+                  CategoryPage(_categories[index]),
+            ),
+          );
+        },
+        child: index < _categories.length
+            ? Text(
+                _categories[index].name,
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold),
+              )
+            : Text('see more'),
+      ),
     );
   }
 
   Widget _buildStory(BuildContext context, int index) {
-    String dateString = '';
-    dateString += _posts[index].date.day.toString();
-    dateString += '/' + _posts[index].date.month.toString();
-    dateString += '/' + _posts[index].date.year.toString();
-    dateString += ' ' + _posts[index].date.hour.toString();
-    dateString += ':' + _posts[index].date.minute.toString();
-
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
@@ -152,59 +158,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
           ),
         );
       },
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-        height: 100,
-        child: Row(
-          children: <Widget>[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Hero(
-                tag: _posts[index].thumbnail,
-                child: FadeInImage(
-                  image: NetworkImage(_posts[index].thumbnail),
-                  placeholder: AssetImage('assets/images/placeholder.png'),
-                  fit: BoxFit.cover,
-                  height: 80,
-                  width: 80,
-                ),
-              ),
-            ),
-            SizedBox(width: 10),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Container(
-                  constraints: BoxConstraints(maxHeight: 50),
-                  width: MediaQuery.of(context).size.width * 0.6,
-                  child: Text(
-                    _posts[index].title,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                        fontSize: 15),
-                  ),
-                ),
-                SizedBox(height: 10),
-                Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.access_time,
-                      size: 12,
-                    ),
-                    SizedBox(width: 5),
-                    Text(
-                      dateString,
-                      style: TextStyle(fontSize: 11),
-                    )
-                  ],
-                )
-              ],
-            )
-          ],
-        ),
-      ),
+      child: StoryWidget(_posts[index]),
     );
   }
 

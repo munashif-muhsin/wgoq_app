@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:wgoq_app/modals/post.dart';
+import 'package:wgoq_app/pages/category.dart';
+import 'package:wgoq_app/pages/post.dart';
 import 'package:wgoq_app/services/categories.dart';
 
 class CategoriesPage extends StatefulWidget {
@@ -8,7 +10,8 @@ class CategoriesPage extends StatefulWidget {
   _CategoriesPageState createState() => _CategoriesPageState();
 }
 
-class _CategoriesPageState extends State<CategoriesPage> with AutomaticKeepAliveClientMixin {
+class _CategoriesPageState extends State<CategoriesPage>
+    with AutomaticKeepAliveClientMixin {
   CategoryService _categoryService = CategoryService();
   int currentPage = 1;
   bool isNewPageLoading = false;
@@ -18,50 +21,59 @@ class _CategoriesPageState extends State<CategoriesPage> with AutomaticKeepAlive
   final _scrollThreshold = 200.0;
 
   Widget _buildListItem(BuildContext context, int index, Post item) {
-    return Container(
-      width: 200,
-      margin: EdgeInsets.only(right: 10, left: 20),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(15),
-        child: Stack(
-          overflow: Overflow.clip,
-          children: <Widget>[
-            Positioned(
-              child: Hero(
-                tag: item.thumbnail,
-                child: FadeInImage(
+    return GestureDetector(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (BuildContext context) => PostPage(item),
+          ),
+        );
+      },
+      child: Container(
+        width: 200,
+        margin: EdgeInsets.only(right: 10, left: 20),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Stack(
+            overflow: Overflow.clip,
+            children: <Widget>[
+              Positioned(
+                child: Hero(
+                  tag: item.thumbnail,
+                  child: FadeInImage(
+                    width: 200,
+                    alignment: Alignment.center,
+                    fit: BoxFit.cover,
+                    placeholder: AssetImage('assets/images/placeholder.png'),
+                    image: NetworkImage(item.thumbnail),
+                  ),
+                ),
+              ),
+              Positioned(
+                child: Container(
                   width: 200,
-                  alignment: Alignment.center,
-                  fit: BoxFit.cover,
-                  placeholder: AssetImage('assets/images/placeholder.png'),
-                  image: NetworkImage(item.thumbnail),
-                ),
-              ),
-            ),
-            Positioned(
-              child: Container(
-                width: 200,
-                padding: EdgeInsets.all(10),
-                color: Colors.black45,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    ConstrainedBox(
-                      constraints: BoxConstraints(maxHeight: 55),
-                      child: Text(
-                        item.title,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15,
-                          fontWeight: FontWeight.w700,
+                  padding: EdgeInsets.all(10),
+                  color: Colors.black45,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      ConstrainedBox(
+                        constraints: BoxConstraints(maxHeight: 55),
+                        child: Text(
+                          item.title,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
-                      ),
-                    )
-                  ],
+                      )
+                    ],
+                  ),
                 ),
-              ),
-            )
-          ],
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -77,12 +89,34 @@ class _CategoriesPageState extends State<CategoriesPage> with AutomaticKeepAlive
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.only(left: 20.0),
-                      child: Text(
-                        categories[index]['category'].name,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            categories[index]['category'].name,
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          FlatButton(
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      CategoryPage(categories[index]['category']),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'See More',
+                              style: TextStyle(
+                                fontSize: 10,
+                                color: Colors.black45,
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
                     Container(
@@ -91,7 +125,9 @@ class _CategoriesPageState extends State<CategoriesPage> with AutomaticKeepAlive
                       margin: EdgeInsets.only(top: 10),
                       child: ListView.builder(
                         shrinkWrap: true,
-                        itemCount: categories[index]['posts'].length > 5 ? 5 : categories[index]['posts'].length,
+                        itemCount: categories[index]['posts'].length > 5
+                            ? 5
+                            : categories[index]['posts'].length,
                         itemBuilder: (BuildContext context, int postIndex) {
                           return _buildListItem(context, index,
                               categories[index]['posts'][postIndex]);
