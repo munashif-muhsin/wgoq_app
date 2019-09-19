@@ -21,15 +21,16 @@ class _SearchPageState extends State<SearchPage> {
     return GestureDetector(
       onTap: () {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (BuildContext context) => PostPage(posts[index]),),
+          MaterialPageRoute(builder: (BuildContext context) => PostPage(posts[index], 'search'),),
         );
       },
-      child: StoryWidget(posts[index]),
+      child: StoryWidget(posts[index], 'search'),
     );
   }
 
   void startSearch() async {
     setState(() {
+      posts = [];
       isLoading = true;
     });
     String searchValue = _editingController.text;

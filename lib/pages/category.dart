@@ -29,12 +29,12 @@ class _CategoryPageState extends State<CategoryPage> {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (BuildContext context) => PostPage(_posts[index]),
+            builder: (BuildContext context) => PostPage(_posts[index], 'category'),
           ),
         );
       },
       child: index != _posts.length
-          ? StoryWidget(_posts[index])
+          ? StoryWidget(_posts[index], 'category')
           : isNewPageLoading
               ? Container(
                   alignment: Alignment.center,

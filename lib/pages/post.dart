@@ -6,7 +6,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 class PostPage extends StatefulWidget {
   final Post post;
-  PostPage(this.post);
+  final String heroTagPrefix;
+  PostPage(this.post, this.heroTagPrefix);
 
   @override
   _PostPageState createState() => _PostPageState();
@@ -50,6 +51,15 @@ class _PostPageState extends State<PostPage> {
     } else {
       bool result = await _utilService.saveBookmark(widget.post);
       if(result) {
+         Fluttertoast.showToast(
+            msg: "Bookmark added.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIos: 1,
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+            fontSize: 14.0
+        );
         setState(() {
           isBookmarked  = true;
         });
@@ -108,7 +118,7 @@ class _PostPageState extends State<PostPage> {
                     ),
                   ],
                 ),
-                tag: widget.post.thumbnail,
+                tag: widget.heroTagPrefix + widget.post.thumbnail,
               ),
             ),
             backgroundColor: Colors.white,

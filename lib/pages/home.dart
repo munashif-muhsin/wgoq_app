@@ -47,7 +47,7 @@ class _HomePageState extends State<HomePage>
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (BuildContext context) => PostPage(_latestPosts[index]),
+            builder: (BuildContext context) => PostPage(_latestPosts[index], 'home'),
           ),
         );
       },
@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage>
                 right: 0,
                 top: 0,
                 child: Hero(
-                  tag: _latestPosts[index].thumbnail,
+                  tag: 'home' + _latestPosts[index].thumbnail,
                   child: FadeInImage(
                     alignment: Alignment.center,
                     fit: BoxFit.cover,
@@ -153,11 +153,11 @@ class _HomePageState extends State<HomePage>
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (BuildContext context) => PostPage(_posts[index]),
+            builder: (BuildContext context) => PostPage(_posts[index], 'home'),
           ),
         );
       },
-      child: StoryWidget(_posts[index]),
+      child: StoryWidget(_posts[index], 'home'),
     );
   }
 
@@ -204,6 +204,7 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return !isLoaded
         ? Center(
             child: SpinKitChasingDots(

@@ -10,7 +10,7 @@ class TabsPage extends StatefulWidget {
 }
 
 class _TabsPageState extends State<TabsPage>
-    with SingleTickerProviderStateMixin{
+    with SingleTickerProviderStateMixin {
   TabController _tabController;
 
   @override
@@ -30,7 +30,12 @@ class _TabsPageState extends State<TabsPage>
       body: TabBarView(
         physics: NeverScrollableScrollPhysics(),
         controller: _tabController,
-        children: <Widget>[HomePage(switchTabs), CategoriesPage(), BookmarksPage(), SearchPage()],
+        children: <Widget>[
+          HomePage(switchTabs),
+          CategoriesPage(),
+          BookmarksPage(),
+          SearchPage(),
+        ],
       ),
       bottomNavigationBar: SafeArea(
         child: SafeArea(

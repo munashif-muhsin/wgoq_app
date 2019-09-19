@@ -23,7 +23,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (BuildContext context) => PostPage(posts[index]),
+            builder: (BuildContext context) => PostPage(posts[index], 'bookmarks'),
           ),
         );
       },
@@ -44,7 +44,7 @@ class _BookmarksPageState extends State<BookmarksPage> {
               ),
             ),
             key: Key(index.toString()),
-        child: StoryWidget(posts[index]),
+        child: StoryWidget(posts[index], 'bookmarks'),
       ),
     );
   }
@@ -56,9 +56,12 @@ class _BookmarksPageState extends State<BookmarksPage> {
   _getData() async {
     posts = await _utilService.getBookmarks();
     print(posts);
-    setState(() {
-      isLoading = false;
-    });
+    if(mounted) {
+      setState(() {
+        isLoading = false;
+      });
+    }
+    
   }
 
   @override

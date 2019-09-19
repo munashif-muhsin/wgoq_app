@@ -3,9 +3,10 @@ import 'package:wgoq_app/modals/post.dart';
 
 class StoryWidget extends StatelessWidget {
 
-  Post post;
+  final Post post;
+  final String heroTagPrefix;
 
-  StoryWidget(this.post);
+  StoryWidget(this.post, this.heroTagPrefix);
 
 
   @override
@@ -27,7 +28,7 @@ class StoryWidget extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
               child: Hero(
-                tag: post.thumbnail,
+                tag: heroTagPrefix + post.thumbnail,
                 child: FadeInImage(
                   image: NetworkImage(post.thumbnail),
                   placeholder: AssetImage('assets/images/placeholder.png'),

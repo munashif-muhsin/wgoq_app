@@ -25,7 +25,7 @@ class _CategoriesPageState extends State<CategoriesPage>
       onTap: () {
         Navigator.of(context).push(
           MaterialPageRoute(
-            builder: (BuildContext context) => PostPage(item),
+            builder: (BuildContext context) => PostPage(item, 'categories'),
           ),
         );
       },
@@ -39,7 +39,7 @@ class _CategoriesPageState extends State<CategoriesPage>
             children: <Widget>[
               Positioned(
                 child: Hero(
-                  tag: item.thumbnail,
+                  tag: 'categories' + item.thumbnail,
                   child: FadeInImage(
                     width: 200,
                     alignment: Alignment.center,
@@ -104,7 +104,8 @@ class _CategoriesPageState extends State<CategoriesPage>
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (BuildContext context) =>
-                                      CategoryPage(categories[index]['category']),
+                                      CategoryPage(
+                                          categories[index]['category']),
                                 ),
                               );
                             },
@@ -163,23 +164,29 @@ class _CategoriesPageState extends State<CategoriesPage>
     if (isNewPageLoading) {
       return;
     }
-    setState(() {
-      isNewPageLoading = true;
-    });
+    if (mounted) {
+      setState(() {
+        isNewPageLoading = true;
+      });
+    }
     print('loading new page');
     List<Map> newCategories =
         await _categoryService.getCategoryPageContent(currentPage + 1);
     currentPage++;
-    setState(() {
-      categories.addAll(newCategories);
-      isNewPageLoading = false;
-    });
+    if (mounted) {
+      setState(() {
+        categories.addAll(newCategories);
+        isNewPageLoading = false;
+      });
+    }
   }
 
   _loadData() async {
     categories = await _categoryService.getCategoryPageContent();
     isLoaded = true;
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   @override
@@ -193,6 +200,7 @@ class _CategoriesPageState extends State<CategoriesPage>
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: !isLoaded
